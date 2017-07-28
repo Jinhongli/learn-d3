@@ -13,6 +13,7 @@ module.exports = {
         path: path.join(__dirname, 'dist'),
         filename: '[name]/[name]![chunkhash].js'
     },
+    devtool: 'cheap-module-eval-source-map',
     plugins: [
         new CleanWebpackPlugin(['dist', 'build'], {
             root: __dirname,
