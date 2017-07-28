@@ -1,0 +1,22 @@
+{
+  "name": "learn-d3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --color"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.16",
+    "html-webpack-plugin": "^2.29.0",
+    "webpack": "^3.4.1",
+    "webpack-dev-server": "^2.6.1"
+  },
+  "dependencies": {
+    "d3": "^4.10.0",
+    "jquery": "^3.2.1"
+  }
+}
