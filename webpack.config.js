@@ -7,7 +7,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
     entry: {
         app: path.join(__dirname, 'src/app/app.js'),
-        vendor: ['d3']
+        vendor: ['d3', 'chance']
     },
     output: {
         path: path.join(__dirname, 'dist'),

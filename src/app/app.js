@@ -1,3 +1,3 @@
-const d3 = require('d3');
+require('./component/DashBoard.js');
 
-d3.select('body').append('p').text('Hello World');
+glue.init();

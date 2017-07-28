@@ -5,8 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>D3</title>
+    <link rel="stylesheet" href="../vendor/bootstrap.min.css">
 </head>
 <body>
+    <div class="jumbotron">
+        <div glue-component="component.DashBoard">
+            <svg glue-node="svgContainer" class="col-xs-12 col-md-6" height="300" style="border: solid 1px"></svg>
+            <p class="text-center">Number of circles: <strong glue-bind-html="number">0</strong></p>
+            <p class="text-center">
+                <button glue-node="addCircleBtn" class="btn btn-primary">Add Circle</button>
+            </p>
+        </div>
+    </div>
+
+
+
     <script src="../vendor/jquery.min.js" charset="utf-8"></script>
     <script src="../vendor/glue.js" charset="utf-8"></script>
 </body>
