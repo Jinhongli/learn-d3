@@ -10,12 +10,13 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center">Dummy Circles</h1>
+        <h1 class="text-center">Exam Results</h1>
         <div glue-component="component.DashBoard">
             <svg glue-node="svgContainer" class="col-xs-12 col-md-6 col-md-offset-3" height="300" style="border: solid 1px"></svg>
-            <p class="text-center">Number of circles: <strong glue-bind-html="number">0</strong></p>
-            <p class="text-center">
-                <button glue-node="addCircleBtn" type="button" class="btn btn-default">Add Circle</button>
+            <p class="text-center" glue-node="subjectBtn">
+                <button data-subject="math" type="button" class="btn btn-default">Math</button>
+                <button data-subject="chinese" type="button" class="btn btn-default">Chinese</button>
+                <button data-subject="english" type="button" class="btn btn-default">English</button>
             </p>
         </div>
     </div>
