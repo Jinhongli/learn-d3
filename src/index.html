@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>D3</title>
-    <link rel="stylesheet" href="../vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="../assert/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assert/css/main.css">
 </head>
 <body>
     <div class="container">
         <h1 class="text-center">Dummy Circles</h1>
         <div glue-component="component.DashBoard">
-            <svg glue-node="svgContainer" class="col-xs-12 col-sm-12 col-md-12" height="300" style="border: solid 1px"></svg>
+            <svg glue-node="svgContainer" class="col-xs-12 col-md-6 col-md-offset-3" height="300" style="border: solid 1px"></svg>
             <p class="text-center">Number of circles: <strong glue-bind-html="number">0</strong></p>
             <p class="text-center">
-                <button glue-node="addCircleBtn" class="btn btn-primary">Add Circle</button>
+                <button glue-node="addCircleBtn" type="button" class="btn btn-default">Add Circle</button>
             </p>
         </div>
     </div>
