@@ -26,6 +26,10 @@ glue.define('component.DashBoard', {
                     .style('stroke', 'black')
                     .style('stroke-width', '4');
                 this.model.number = ++numberOfCircles;
+            }else if(elementType === 'clearBtn'){
+                this.svg.$.html('');
+                numberOfCircles = 0;
+                this.model.number = '0';
             }
         }
     }
