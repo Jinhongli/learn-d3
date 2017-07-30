@@ -3,7 +3,8 @@
 }
 
 svg {
-	padding: 0px !important; 
+	padding: 0px !important;
+	margin-bottom: 20px;
 }
 
 svg g rect {
@@ -15,4 +16,12 @@ svg g rect {
 svg g rect:hover {
 	fill: #FDBE34;
 	stroke-width: 3px;
+}
+
+svg g.axis text {
+	fill: #666;
+}
+
+svg g.data text {
+	fill: #333;
 }

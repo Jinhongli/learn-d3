@@ -69,32 +69,37 @@ glue.define('component.DashBoard', {
         let enter = update.enter();
         let exit = update.exit();
 
-        // Update pattern
+        // ****** Update pattern ****** //
         update.select('rect')
+            .transition()
             .attr('x', function(d, i){ return xScale(i)}.bind(this))
             .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
             .attr('width', xScale.bandwidth())
+
             .attr('height', function(d){ return yScale(d.score) }.bind(this));
-        update.select('text').text(function(d){return d.score})
+        update.select('text')
+            .text(function(d){return d.score})
+            .transition()
             .attr('x', function(d, i){ return xScale(i)}.bind(this))
             .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
             .attr('dx', 15)
             .attr('dy', -10);
 
-        // Enter pattern
-        let enterGroup = enter.append('g');
+        // ****** Enter pattern ****** //
+        let enterGroup = enter.append('g').classed('data', true);
         enterGroup.append('rect')
             .attr('x', function(d, i){ return xScale(i)}.bind(this))
             .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
             .attr('width', xScale.bandwidth())
             .attr('height', function(d){ return yScale(d.score) }.bind(this));
-        enterGroup.append('text').text(function(d){return d.score})
+        enterGroup.append('text')
+            .text(function(d){return d.score})
             .attr('x', function(d, i){ return xScale(i)}.bind(this))
             .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
             .attr('dx', 15)
             .attr('dy', -10)
 
-        // Exit pattern
+        // ****** Exit pattern ****** //
         exit.remove();
 
         // draw x-axis
@@ -111,7 +116,7 @@ glue.define('component.DashBoard', {
     },
     listeners: {
         click: function (event, element, elementType) {
-            if(elementType === 'subjectBtn'){
+            if(elementType === 'subjectBtn' && $(event.target).data('subject') ){
                 let subject = $(event.target).data('subject');
                 this.subject = subject;
                 this.draw(this.getSubjectData());
