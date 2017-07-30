@@ -1,3 +1,18 @@
-.container h1{
+.container h1 {
 	margin-bottom: 20px;
+}
+
+svg {
+	padding: 0px !important; 
+}
+
+svg g rect {
+	fill: #10316B;
+	stroke: black;
+	stroke-width: 2px;
+}
+
+svg g rect:hover {
+	fill: #FDBE34;
+	stroke-width: 3px;
 }
