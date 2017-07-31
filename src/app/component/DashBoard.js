@@ -5,12 +5,12 @@ let chance = new Chance();
 chance.mixin({
     'scores': function() {
         return {
-            chinese: chance.natural({min: 70, max: 100}),
-            math: chance.natural({min: 50, max: 90}),
-            english: chance.natural({min: 70, max: 95}),
-            physics: chance.natural({min: 50, max: 85}),
-            chemistry: chance.natural({min: 70, max: 100}),
-            computerScience: chance.natural({min: 80, max: 100}),
+            chinese: chance.natural({min: 40, max: 100}),
+            math: chance.natural({min: 40, max: 100}),
+            english: chance.natural({min: 40, max: 100}),
+            physics: chance.natural({min: 40, max: 100}),
+            chemistry: chance.natural({min: 40, max: 100}),
+            computerScience: chance.natural({min: 40, max: 100}),
         }
     }
 });
@@ -32,11 +32,11 @@ glue.define('component.DashBoard', {
         this.svg.$ = this.nodes.svgContainer;
         this.svg.node = this.svg.$[0];
         this.svg.selection = d3.select(this.svg.node);
-        this.svg.width = this.svg.$.width();
+        this.svg.width = this.svg.$.width() - 140;
         this.svg.height = this.svg.$.height();
         this.svg.padding = 30;
         this.subject = 'math';
-        this.draw(this.getSubjectData());
+        this.drawHistogram(this.getSubjectData());
     },
     getSubjectData: function(subject){
         subject = this.subject;
@@ -57,7 +57,7 @@ glue.define('component.DashBoard', {
         }
         return names;
     },
-    draw: function(subjectData){
+    drawHistogram: function(subjectData){
         this.svg.selection.selectAll('g.axis').remove();
         let students = this.getStudentName();
         let yTranslate = this.svg.height - this.svg.padding;
@@ -113,13 +113,68 @@ glue.define('component.DashBoard', {
         this.svg.selection.append('g').call(yAxis)
             .attr('transform', 'translate('+ this.svg.padding +','+ this.svg.padding +')')
             .classed('axis', true);
+
+        this.drawPie(subjectData);
+    },
+    drawPie: function(subjectData){
+        this.svg.selection.append('g')
+            .classed('pie', true)
+            .attr('transform', 'translate('+ (this.svg.width + 25) +', 140)');
+
+        this.svg.selection.append('g')
+            .classed('pie-legend', true)
+            .attr('transform', 'translate('+ (this.svg.width + 25) +', 180)');
+
+        let pieGenerator = d3.pie()
+            .value(function(d){return d.score})
+            .sort(function(a, b){return a-b});
+
+        let data = [
+            {scoreArea: '80', score: subjectData.filter(function(student){ return student.score >= 80}).length},
+            {scoreArea: '60', score: subjectData.filter(function(student){ return student.score >= 60 && student.score < 80}).length},
+            {scoreArea: 'Not Pass', score: subjectData.filter(function(student){ return student.score < 60}).length}
+        ];
+        console.log(data);
+
+        let arcGenerator = d3.arc()
+            .innerRadius(20)
+            .outerRadius(80)
+            .padRadius(80)
+            .cornerRadius(4);
+
+        let arcData = pieGenerator(data);
+
+        // arc
+        let arcUpdate = d3.select('g.pie')
+            .selectAll('path')
+            .data(arcData);
+        let arcEnter = arcUpdate.enter();
+        arcEnter.merge(arcUpdate)
+            .append('path')
+            .attr('d', arcGenerator);
+
+        // label
+        let labelUpdate = d3.select('g.pie')
+            .selectAll('text')
+            .data(arcData);
+        let labelEnter = labelUpdate.enter();
+        labelEnter.merge(labelUpdate)
+            .append('text')
+            .each(function(d) {
+                var centroid = arcGenerator.centroid(d);
+                d3.select(this)
+                    .attr('x', centroid[0])
+                    .attr('y', centroid[1])
+                    .attr('dy', '0.33em')
+                    .text(d.data.scoreArea);
+            });
     },
     listeners: {
         click: function (event, element, elementType) {
             if(elementType === 'subjectBtn' && $(event.target).data('subject') ){
                 let subject = $(event.target).data('subject');
                 this.subject = subject;
-                this.draw(this.getSubjectData());
+                this.drawHistogram(this.getSubjectData());
             }
         }
     }

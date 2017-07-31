@@ -25,3 +25,25 @@ svg g.axis text {
 svg g.data text {
 	fill: #333;
 }
+
+svg g.pie path{
+	stroke: white;
+}
+
+svg g.pie path:nth-child(1){
+	fill: green;
+}
+svg g.pie path:nth-child(2){
+	fill: orange;
+}
+svg g.pie path:nth-child(3){
+	fill: red;
+}
+
+svg g.pie text{
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	fill: white;
+	text-anchor: middle;
+}
