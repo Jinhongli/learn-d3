@@ -40,10 +40,18 @@ svg g.pie path:nth-child(3){
 	fill: red;
 }
 
-svg g.pie text{
+svg g.pie text.label{
 	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
 	fill: white;
+	text-anchor: middle;
+}
+
+svg g.pie text.legend{
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	fill: #000;
 	text-anchor: middle;
 }

@@ -32,7 +32,7 @@ glue.define('component.DashBoard', {
         this.svg.$ = this.nodes.svgContainer;
         this.svg.node = this.svg.$[0];
         this.svg.selection = d3.select(this.svg.node);
-        this.svg.width = this.svg.$.width() - 140;
+        this.svg.width = 2*this.svg.$.width()/3 ;
         this.svg.height = this.svg.$.height();
         this.svg.padding = 30;
         this.subject = 'math';
@@ -65,7 +65,7 @@ glue.define('component.DashBoard', {
         let xScale = d3.scaleBand().domain(d3.range(0, students.length)).range([this.svg.padding, this.svg.width - 2*this.svg.padding]).padding(0.3);
         let yScale = d3.scaleLinear().domain([0,100]).range([0, this.svg.height - 2*this.svg.padding]);
 
-        let update = this.svg.selection.selectAll('g').data(subjectData);
+        let update = this.svg.selection.selectAll('g.data').data(subjectData);
         let enter = update.enter();
         let exit = update.exit();
 
@@ -74,15 +74,14 @@ glue.define('component.DashBoard', {
             .transition()
             .attr('x', function(d, i){ return xScale(i)}.bind(this))
             .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
-            .attr('width', xScale.bandwidth())
-
+            .attr('width', xScale.bandwidth())  
             .attr('height', function(d){ return yScale(d.score) }.bind(this));
         update.select('text')
             .text(function(d){return d.score})
             .transition()
-            .attr('x', function(d, i){ return xScale(i)}.bind(this))
+            .attr('x', function(d, i){ return xScale(i) + xScale.bandwidth()/2}.bind(this))
             .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
-            .attr('dx', 15)
+            .style('text-anchor', 'middle')
             .attr('dy', -10);
 
         // ****** Enter pattern ****** //
@@ -94,9 +93,9 @@ glue.define('component.DashBoard', {
             .attr('height', function(d){ return yScale(d.score) }.bind(this));
         enterGroup.append('text')
             .text(function(d){return d.score})
-            .attr('x', function(d, i){ return xScale(i)}.bind(this))
+            .attr('x', function(d, i){ return xScale(i) + xScale.bandwidth()/2}.bind(this))
             .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
-            .attr('dx', 15)
+            .style('text-anchor', 'middle')
             .attr('dy', -10)
 
         // ****** Exit pattern ****** //
@@ -117,49 +116,44 @@ glue.define('component.DashBoard', {
         this.drawPie(subjectData);
     },
     drawPie: function(subjectData){
-        this.svg.selection.append('g')
-            .classed('pie', true)
-            .attr('transform', 'translate('+ (this.svg.width + 25) +', 140)');
-
-        this.svg.selection.append('g')
-            .classed('pie-legend', true)
-            .attr('transform', 'translate('+ (this.svg.width + 25) +', 180)');
-
-        let pieGenerator = d3.pie()
-            .value(function(d){return d.score})
-            .sort(function(a, b){return a-b});
-
+        let pieOuterRadius = 90;
+        let pieInnerRadius = 20;
         let data = [
-            {scoreArea: '80', score: subjectData.filter(function(student){ return student.score >= 80}).length},
-            {scoreArea: '60', score: subjectData.filter(function(student){ return student.score >= 60 && student.score < 80}).length},
-            {scoreArea: 'Not Pass', score: subjectData.filter(function(student){ return student.score < 60}).length}
+            {scoreArea: '80', number: subjectData.filter(function(student){ return student.score >= 80}).length},
+            {scoreArea: '60', number: subjectData.filter(function(student){ return student.score >= 60 && student.score < 80}).length},
+            {scoreArea: 'Not Pass', number: subjectData.filter(function(student){ return student.score < 60}).length}
         ];
         console.log(data);
 
+        this.svg.selection.select('g.pie')
+            .attr('transform', 'translate('+ 2.25*this.svg.$.width()/3 +', '+ (pieOuterRadius + this.svg.padding) +')')
+
+        let pieGenerator = d3.pie()
+            .value(function(d){return d.number})
+            .sort(function(a, b){return a-b});
         let arcGenerator = d3.arc()
-            .innerRadius(20)
-            .outerRadius(80)
-            .padRadius(80)
-            .cornerRadius(4);
+            .innerRadius(pieInnerRadius)
+            .outerRadius(pieOuterRadius)
+            .padRadius(100)
+            .padAngle(.02)
+            .cornerRadius(5);
 
-        let arcData = pieGenerator(data);
+        let arcData = pieGenerator(data);console.log(arcData)
 
-        // arc
         let arcUpdate = d3.select('g.pie')
             .selectAll('path')
             .data(arcData);
-        let arcEnter = arcUpdate.enter();
-        arcEnter.merge(arcUpdate)
+        arcUpdate.enter()
             .append('path')
+            .merge(arcUpdate)
             .attr('d', arcGenerator);
 
-        // label
         let labelUpdate = d3.select('g.pie')
-            .selectAll('text')
+            .selectAll('text.label')
             .data(arcData);
-        let labelEnter = labelUpdate.enter();
-        labelEnter.merge(labelUpdate)
-            .append('text')
+        labelUpdate.enter()
+            .append('text').classed('label', true)
+            .merge(labelUpdate)
             .each(function(d) {
                 var centroid = arcGenerator.centroid(d);
                 d3.select(this)
@@ -168,6 +162,15 @@ glue.define('component.DashBoard', {
                     .attr('dy', '0.33em')
                     .text(d.data.scoreArea);
             });
+
+        let legendUpdate = d3.select('g.pie')
+            .selectAll('text.legend')
+            .data(data);
+        legendUpdate.enter()
+            .append('text').classed('legend', true)
+            .merge(legendUpdate)
+            .text(function(d, i){return `${d.scoreArea}: ${d.number}`})
+            .attr('transform', function(d, i){ return 'translate(0, '+ (120+i*20) +')' }.bind(this));
     },
     listeners: {
         click: function (event, element, elementType) {
