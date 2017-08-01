@@ -121,7 +121,7 @@ glue.define('component.DashBoard', {
         let data = [
             {scoreArea: '80', number: subjectData.filter( student => (student.score >= 80) ).length},
             {scoreArea: '60', number: subjectData.filter( student => (student.score >= 60 && student.score < 80) ).length},
-            {scoreArea: 'Not Pass', number: subjectData.filter( student => (student.score < 60) ).length}
+            {scoreArea: 'Fail', number: subjectData.filter( student => (student.score < 60) ).length}
         ];
 
         this.svg.selection.select('g.pie')

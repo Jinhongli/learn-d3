@@ -12,7 +12,7 @@ svg g.data rect {
 	stroke: black;
 	stroke-width: 2px;
 }
-svg g.data.highlight80 rect{
+/*svg g.data.highlight80 rect{
 	fill: green;
 }
 svg g.data.highlight60 rect{
@@ -20,7 +20,7 @@ svg g.data.highlight60 rect{
 }
 svg g.data.highlightNaN rect{
 	fill: red;
-}
+}*/
 
 svg g.data rect:hover {
 	fill: #FDBE34;
@@ -39,14 +39,14 @@ svg g.pie path{
 	stroke: white;
 }
 
-svg g.pie path:nth-child(1){
-	fill: green;
+svg g.pie path:nth-child(1), svg g.data.highlight80 rect{
+	fill: #127C56;
 }
-svg g.pie path:nth-child(2){
-	fill: orange;
+svg g.pie path:nth-child(2), svg g.data.highlight60 rect{
+	fill: #FC8A15;
 }
-svg g.pie path:nth-child(3){
-	fill: red;
+svg g.pie path:nth-child(3), svg g.data.highlightNaN rect{
+	fill: #BE3144;
 }
 
 svg g.pie text.label{
