@@ -7,13 +7,22 @@ svg {
 	margin-bottom: 20px;
 }
 
-svg g rect {
+svg g.data rect {
 	fill: #10316B;
 	stroke: black;
 	stroke-width: 2px;
 }
+svg g.data.highlight80 rect{
+	fill: green;
+}
+svg g.data.highlight60 rect{
+	fill: orange;
+}
+svg g.data.highlightNaN rect{
+	fill: red;
+}
 
-svg g rect:hover {
+svg g.data rect:hover {
 	fill: #FDBE34;
 	stroke-width: 3px;
 }

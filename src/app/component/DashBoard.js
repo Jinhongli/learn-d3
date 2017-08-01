@@ -72,29 +72,29 @@ glue.define('component.DashBoard', {
         // ****** Update pattern ****** //
         update.select('rect')
             .transition()
-            .attr('x', function(d, i){ return xScale(i)}.bind(this))
-            .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
-            .attr('width', xScale.bandwidth())  
-            .attr('height', function(d){ return yScale(d.score) }.bind(this));
+            .attr('x', (d, i) => xScale(i) )
+            .attr('y', d => (this.svg.height - this.svg.padding - yScale(d.score)) )
+            .attr('width', xScale.bandwidth() )  
+            .attr('height', d => yScale(d.score) );
         update.select('text')
-            .text(function(d){return d.score})
             .transition()
-            .attr('x', function(d, i){ return xScale(i) + xScale.bandwidth()/2}.bind(this))
-            .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
+            .text( d => d.score )
+            .attr('x', (d, i) => (xScale(i) + xScale.bandwidth()/2) )
+            .attr('y', d => (this.svg.height - this.svg.padding - yScale(d.score)) )
             .style('text-anchor', 'middle')
             .attr('dy', -10);
 
         // ****** Enter pattern ****** //
         let enterGroup = enter.append('g').classed('data', true);
         enterGroup.append('rect')
-            .attr('x', function(d, i){ return xScale(i)}.bind(this))
-            .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
-            .attr('width', xScale.bandwidth())
-            .attr('height', function(d){ return yScale(d.score) }.bind(this));
+            .attr('x', (d, i) => xScale(i) )
+            .attr('y', d => (this.svg.height - this.svg.padding - yScale(d.score)) )
+            .attr('width', xScale.bandwidth() )
+            .attr('height', d => yScale(d.score) );
         enterGroup.append('text')
-            .text(function(d){return d.score})
-            .attr('x', function(d, i){ return xScale(i) + xScale.bandwidth()/2}.bind(this))
-            .attr('y', function(d){ return this.svg.height - this.svg.padding - yScale(d.score) }.bind(this))
+            .text( d => d.score )
+            .attr('x', (d, i) => (xScale(i) + xScale.bandwidth()/2) )
+            .attr('y', d => (this.svg.height - this.svg.padding - yScale(d.score)) )
             .style('text-anchor', 'middle')
             .attr('dy', -10)
 
@@ -102,15 +102,15 @@ glue.define('component.DashBoard', {
         exit.remove();
 
         // draw x-axis
-        let xAxis = d3.axisBottom(xScale).tickFormat(function(d, i){return students[i]});
+        let xAxis = d3.axisBottom(xScale).tickFormat((d, i) => students[i] );
         this.svg.selection.append('g').call(xAxis)
-            .attr('transform', 'translate(0, '+ yTranslate +')')
+            .attr('transform', `translate(0, ${yTranslate})`)
             .classed('axis', true);
         // draw y-axis
         yScale.range([this.svg.height - 2*this.svg.padding, 0]);
         let yAxis = d3.axisLeft(yScale);
         this.svg.selection.append('g').call(yAxis)
-            .attr('transform', 'translate('+ this.svg.padding +','+ this.svg.padding +')')
+            .attr('transform', `translate(${this.svg.padding}, ${this.svg.padding})`)
             .classed('axis', true);
 
         this.drawPie(subjectData);
@@ -119,18 +119,17 @@ glue.define('component.DashBoard', {
         let pieOuterRadius = 90;
         let pieInnerRadius = 20;
         let data = [
-            {scoreArea: '80', number: subjectData.filter(function(student){ return student.score >= 80}).length},
-            {scoreArea: '60', number: subjectData.filter(function(student){ return student.score >= 60 && student.score < 80}).length},
-            {scoreArea: 'Not Pass', number: subjectData.filter(function(student){ return student.score < 60}).length}
+            {scoreArea: '80', number: subjectData.filter( student => (student.score >= 80) ).length},
+            {scoreArea: '60', number: subjectData.filter( student => (student.score >= 60 && student.score < 80) ).length},
+            {scoreArea: 'Not Pass', number: subjectData.filter( student => (student.score < 60) ).length}
         ];
-        console.log(data);
 
         this.svg.selection.select('g.pie')
-            .attr('transform', 'translate('+ 2.25*this.svg.$.width()/3 +', '+ (pieOuterRadius + this.svg.padding) +')')
+            .attr('transform', `translate(${2.25*this.svg.$.width()/3}, ${pieOuterRadius + this.svg.padding})`)
 
         let pieGenerator = d3.pie()
-            .value(function(d){return d.number})
-            .sort(function(a, b){return a-b});
+            .value( d => d.number )
+            .sort( (a,b) => a-b );
         let arcGenerator = d3.arc()
             .innerRadius(pieInnerRadius)
             .outerRadius(pieOuterRadius)
@@ -138,7 +137,7 @@ glue.define('component.DashBoard', {
             .padAngle(.02)
             .cornerRadius(5);
 
-        let arcData = pieGenerator(data);console.log(arcData)
+        let arcData = pieGenerator(data);
 
         let arcUpdate = d3.select('g.pie')
             .selectAll('path')
@@ -146,7 +145,35 @@ glue.define('component.DashBoard', {
         arcUpdate.enter()
             .append('path')
             .merge(arcUpdate)
-            .attr('d', arcGenerator);
+            .attr('d', arcGenerator)
+            .on('mouseover', d => {
+                let highLight = [];
+                let scoreArea = parseInt(d.data.scoreArea);
+                subjectData.forEach((data, index) => {                    
+                    if(scoreArea === 80){
+                        if(data.score >= 80){
+                            highLight.push(index);
+                        }
+                    }else if(scoreArea === 60){
+                        if(data.score >= 60 && data.score < 80){
+                            highLight.push(index);
+                        }
+                    }else{
+                        if(data.score < 60){
+                            highLight.push(index);
+                        }
+                    }
+                });
+                this.svg.selection
+                .selectAll('g.data')
+                .classed('highlight'+scoreArea, (d, i) => highLight.indexOf(i) >= 0 );
+            })
+            .on('mouseout', d => {
+                let scoreArea = parseInt(d.data.scoreArea);
+                this.svg.selection
+                .selectAll('g.data')
+                .classed('highlight'+scoreArea, false );
+            });
 
         let labelUpdate = d3.select('g.pie')
             .selectAll('text.label')
@@ -169,13 +196,13 @@ glue.define('component.DashBoard', {
         legendUpdate.enter()
             .append('text').classed('legend', true)
             .merge(legendUpdate)
-            .text(function(d, i){return `${d.scoreArea}: ${d.number}`})
-            .attr('transform', function(d, i){ return 'translate(0, '+ (120+i*20) +')' }.bind(this));
+            .text( d => `${d.scoreArea}: ${d.number}` )
+            .attr('transform', (d, i) => `translate(0, ${120+i*20})` );
     },
     listeners: {
         click: function (event, element, elementType) {
-            if(elementType === 'subjectBtn' && $(event.target).data('subject') ){
-                let subject = $(event.target).data('subject');
+            let subject;
+            if(elementType === 'subjectBtn' && (subject = $(event.target).data('subject')) ){
                 this.subject = subject;
                 this.drawHistogram(this.getSubjectData());
             }
