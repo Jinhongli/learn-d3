@@ -21,41 +21,17 @@ glue.define('component.DashBoard', {
         this.svg.treeLayout = d3.tree().size([this.svg.width, this.svg.height]);
     },
     render: function(data){
-        // this.svg.$.find('.nodes').html('');
-        // this.svg.$.find('.texts').html('');
         this.svg.$.find('.links').html('');
         let root = d3.hierarchy(data);
         this.svg.treeLayout(root);
-
-        // Nodes
+        let links = this.svg.selection.select('g.links');
         let nodes = this.svg.selection.select('g.nodes');
-        let updateNodes = nodes.selectAll('circle.node').data(root.descendants());
-        let enterNodes = updateNodes.enter();
-        enterNodes
-            .append('circle')
-            .classed('node', true)
-            .merge(updateNodes)
-            .attr('cx', function(d) {return d.x;})
-            .attr('cy', function(d) {return d.y;})
-            .attr('r', 10);
-        updateNodes.exit().remove();
-
-        // Labels
         let labels = this.svg.selection.select('g.texts');
-        let updateLabels = nodes.selectAll('text.text').data(root.descendants());
-        let enterLabels = updateLabels.enter();
-        enterLabels
-            .append('text')
-            .classed('text', true)
-            .merge(updateLabels)
-            .attr('x', function(d) {return d.x;})
-            .attr('y', function(d) {return d.y;})
-            .text( d => d.data.tag || 'text');
-        updateLabels.exit().remove();
+        let nodesWidth = 50;
+        let nodesHeight = 20;
 
         // Links
-        let links = this.svg.selection.select('g.links');
-        let updateLinks = nodes.selectAll('line.link').data(root.links());
+        let updateLinks = links.selectAll('line.link').data(root.links());
         let enterLinks = updateLinks.enter();
         enterLinks
             .append('line')
@@ -66,6 +42,35 @@ glue.define('component.DashBoard', {
             .attr('x2', function(d) {return d.target.x;})
             .attr('y2', function(d) {return d.target.y;});
         updateLinks.exit().remove();
+
+        // Nodes
+        let updateNodes = nodes.selectAll('rect.node').data(root.descendants());
+        let enterNodes = updateNodes.enter();
+        enterNodes
+            .append('rect')
+            .classed('node', true)
+            .merge(updateNodes)
+            .attr('x', function(d) {return d.x - nodesWidth/2;})
+            .attr('y', function(d) {return d.y - nodesHeight/2;})
+            .attr('width', nodesWidth)
+            .attr('height', nodesHeight)
+            .attr('rx', 5)
+            .classed('tag', d => d.data.tag);
+        updateNodes.exit().remove();
+
+        // Labels
+        let updateLabels = labels.selectAll('text.text').data(root.descendants());
+        let enterLabels = updateLabels.enter();
+        enterLabels
+            .append('text')
+            .classed('text', true)
+            .merge(updateLabels)
+            .attr('x', function(d) {return d.x;})
+            .attr('y', function(d) {return d.y;})
+            .attr("dominant-baseline", "central")
+            .attr("text-anchor", "middle")
+            .text( d => d.data.tag ? d.data.tag.toUpperCase() : d.data.text)
+        updateLabels.exit().remove();
     },
     listeners: {
         click: function (event, element, elementType) {

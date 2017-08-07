@@ -48,16 +48,22 @@
 	height: 200px;
 }
 
+.node.tag {
+	fill: #FB5660;
+}
+
 .node {
-  fill: steelblue;
-  stroke: none;
+	fill: #2994B2;
+	stroke: none;
+	border-radius: 5px;
 }
 
 .link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 2px;
+	fill: none;
+	stroke: #464545;
+	stroke-width: 2px;
 }
 .text {
 	font-size: 12px;
+	fill: #333;
 }
