@@ -2,56 +2,62 @@
 	margin-bottom: 20px;
 }
 
-svg {
-	padding: 0px !important;
+.row svg {
+	border: solid 1px #ccc;
+	border-radius: 5px;
+}
+.row{
 	margin-bottom: 20px;
 }
-
-svg g rect {
-	fill: #10316B;
-	stroke: black;
-	stroke-width: 2px;
+#htmlBlock{
+	height: 256px;
+	border: solid 1px #ccc;
+	border-radius: 5px;
+	padding: 10px;
+}
+#htmlBlock * {
+	border: solid 1px #303481;
+	padding: 1px 3px;
+}
+#codeBlock pre{
+	height: 200px;
+}
+#exampleGround{
+	z-index: 9;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	width: 400px;
+	height: 250px;
+	transform: translate(-50%, -50%);
+}
+#exampleGround button.copy{
+	position: absolute;
+	left: 50%;
+	bottom: 50px;
+	transform: translate(-50%, 0);
+}
+#exampleGround button.close{
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+#codeBlock textarea{
+	margin-bottom: 10px;
+	resize: none;
+	height: 200px;
 }
 
-svg g rect:hover {
-	fill: #FDBE34;
-	stroke-width: 3px;
+.node {
+  fill: steelblue;
+  stroke: none;
 }
 
-svg g.axis text {
-	fill: #666;
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
 }
-
-svg g.data text {
-	fill: #333;
-}
-
-svg g.pie path{
-	stroke: white;
-}
-
-svg g.pie path:nth-child(1){
-	fill: green;
-}
-svg g.pie path:nth-child(2){
-	fill: orange;
-}
-svg g.pie path:nth-child(3){
-	fill: red;
-}
-
-svg g.pie text.label{
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
+.text {
 	font-size: 12px;
-	font-weight: bold;
-	fill: white;
-	text-anchor: middle;
-}
-
-svg g.pie text.legend{
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
-	font-size: 16px;
-	font-weight: bold;
-	fill: #000;
-	text-anchor: middle;
 }

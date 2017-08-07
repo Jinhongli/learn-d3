@@ -11,18 +11,26 @@
 <body>
     <div class="container">
         <h1 class="text-center">Exam Results</h1>
-        <div glue-component="component.DashBoard">
-            <svg glue-node="svgContainer" class="col-xs-12 col-md-6 col-md-offset-3" height="300" style="border: solid 1px">
-                <g class="pie"></g>
+        <div glue-component="component.CodeGround" class="row">
+            <div glue-node="htmlBlock" id="htmlBlock" class="col-md-6">
+            </div>
+            <div id="codeBlock" class="col-md-6">
+                <!-- <pre glue-node="codeShow"></pre> -->
+                <textarea glue-node="codeInput" name="codearea" id="codearea" class="form-control" placeholder="Code Here.."></textarea>
+                <button glue-node="convertBtn" type="button" class="btn btn-lg btn-success" class="text-center">Convert</button>
+                <button glue-node="demoBtn1" type="button" class="btn btn-lg btn-primary">Example1</button>
+                <button glue-node="demoBtn2" type="button" class="btn btn-lg btn-primary">Example2</button>
+                <button glue-node="demoBtn3" type="button" class="btn btn-lg btn-primary">Example3</button>
+            </div>
+        </div>
+        <div glue-component="component.DashBoard" class="row">
+            <svg glue-node="svgContainer" class="col-md-12" height="500">
+                <g transform="translate(30, 30)">
+                    <g class="links"></g>
+                    <g class="nodes"></g>
+                    <g class="texts"></g>
+                </g>
             </svg>
-            <p class="text-center" glue-node="subjectBtn">
-                <button data-subject="math" type="button" class="btn btn-default">Math</button>
-                <button data-subject="chinese" type="button" class="btn btn-default">Chinese</button>
-                <button data-subject="english" type="button" class="btn btn-default">English</button>
-                <button data-subject="physics" type="button" class="btn btn-default">Physics</button>
-                <button data-subject="chemistry" type="button" class="btn btn-default">Chemistry</button>
-                <button data-subject="computerScience" type="button" class="btn btn-default">Computer Science</button>
-            </p>
         </div>
     </div>
 
