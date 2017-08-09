@@ -71,14 +71,5 @@ glue.define('component.DashBoard', {
             .attr("text-anchor", "middle")
             .text( d => d.data.tag ? d.data.tag.toUpperCase() : d.data.text)
         updateLabels.exit().remove();
-    },
-    listeners: {
-        click: function (event, element, elementType) {
-            if(elementType === 'subjectBtn' && $(event.target).data('subject') ){
-                let subject = $(event.target).data('subject');
-                this.subject = subject;
-                this.drawHistogram(this.getSubjectData());
-            }
-        }
     }
 });
